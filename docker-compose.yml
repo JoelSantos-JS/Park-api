@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  dcs-postgres:
+    image: postgres:15.3-alpine
+    container_name: park
+    environment:
+      POSTGRES_PASSWORD: joel
+      POSTGRES_USER: postgres
+    ports:
+      - 5435:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
