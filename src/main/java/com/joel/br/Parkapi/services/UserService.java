@@ -1,5 +1,6 @@
 package com.joel.br.Parkapi.services;
 
+import com.joel.br.Parkapi.DTO.UserPasswordDTO;
 import com.joel.br.Parkapi.DTO.UserRequest;
 import com.joel.br.Parkapi.DTO.UserResponse;
 import com.joel.br.Parkapi.entity.Role;
@@ -42,18 +43,26 @@ public class UserService {
     }
 
 
-    public  User updatePassword(Long id, String user){
+    public UserPasswordDTO updatePassword(Long id, UserPasswordDTO password) {
         User user1 = findById(id);
 
 
-        user1.setModifiedDate(LocalDateTime.now());
-        user1.setPassword(user);
+        if (user1.getPassword().equals(password.actualPassword())) {
+            user1.setModifiedDate(LocalDateTime.now());
+
+            if (password.newPassword() != password.confirmationPassword()) {
+                return null;
+            } else {
+                user1.setPassword(password.newPassword());
+
+                repository.save(user1);
+            }
+
+        }
 
 
-
-        return user1;
+        return password;
     }
-
 
     public User updateUser(Long id, User user) {
         User existentUser= repository.findById(id).get();
